@@ -42,12 +42,15 @@ def build_nfa_from_postfix(postfix):
     stack = []
 
     for char in postfix:
+        
+        # if char is an operand, create an NFA with a single transition
         if char == '0' or char == '1':  # operand
             start = new_state()
             end = new_state()
             transitions = [(start, end, char)]
             stack.append(NFA(start, end, transitions))
 
+        # if char is an operator, apply the operator to the NFA(s) on the stack
         elif char == '.':  # concatenation
             nfa2 = stack.pop()
             nfa1 = stack.pop()
@@ -110,3 +113,24 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Example input:
+# 16
+# ((0.((0+1)*)).1)
+
+# Output:
+# 12 14 0 11
+# 0 1 0
+# 2 3 0
+# 4 5 1
+# 6 2 e
+# 6 4 e
+# 3 7 e
+# 5 7 e
+# 8 6 e
+# 7 8 e
+# 8 9 e
+# 7 9 e
+# 1 8 e
+# 10 11 1
+# 9 10 e
